@@ -1,8 +1,10 @@
 package db
 import (
+    "errors"
     "github.com/Zaprit/CrashReporter/pkg/model"
-    "gorm.io/driver/sqlite"
+    "github.com/glebarez/sqlite"
     "gorm.io/gorm"
+    "time"
 )
 
 var database *gorm.DB
@@ -16,7 +18,7 @@ func OpenDB(path string) {
 }
 
 func MigrateDB() {
-    err := database.AutoMigrate(&model.Notice{}, &model.Report{}, &model.ReportCategory{}, &model.ReportType{})
+    err := database.AutoMigrate(&model.Notice{}, &model.Report{}, &model.ReportCategory{}, &model.ReportType{}, &model.Session{})
     if err != nil {
         panic(err.Error())
     }
@@ -34,6 +36,14 @@ func GetReport(id string) model.Report {
     return Report
 }
 
+var reportCount = int64(20)
+
+func GetReports(page int) []model.Report {
+    var Reports []model.Report
+
+    database.Find(&Reports)
+    return Reports
+}
 
 
 func GetReportCategories() map[string][]string {
@@ -82,6 +92,33 @@ func SubmitReport(report *model.Report) error {
         return database.Error
     }
     return nil
+}
+
+
+
+func SaveSession(session *model.Session) error{
+    database.Save(session)
+    if database.Error != nil {
+        return database.Error
+    }
+    return nil
+}
+
+func GetSession(sessionID string) (model.Session, error) {
+
+    var session model.Session
+    database.Where("id = ?", sessionID).First(&session)
+
+    if session.ID == "" {
+        return model.Session{}, errors.New("invalid session")
+    }
+
+    if session.Expires.Sub(time.Now()) < 0 {
+        database.Delete(session)
+        return model.Session{}, nil
+    }
+
+    return session, nil
 }
 
 //func Login(username string, password string) model.User

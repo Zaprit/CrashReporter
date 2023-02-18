@@ -5,10 +5,18 @@ import (
     "os"
 )
 
-func LoadConfig(path string) {
+var LoadedConfig Config
+
+func LoadConfig(path string) error {
     data, err := os.ReadFile(path)
     if err != nil {
-        
+        return err
     }
-    toml.Unmarshal()
+    var config Config
+    err = toml.Unmarshal(data, &config)
+    if err != nil {
+        return err
+    }
+    LoadedConfig = config
+    return nil
 }

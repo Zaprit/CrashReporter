@@ -19,7 +19,7 @@
             <span>Report a Beacon Issue</span>
           </a>
         </div>
-        <div class="Header-item"><a href="https://github.com/login/oauth/authorize?scope=user:email&client_id=${{ .ClientID }}">Sign In With Github</a></div>
+        <div class="Header-item"><a href="https://github.com/login/oauth/authorize?state={{ .State }}&client_id={{ .ClientID }}">Sign In With Github</a></div>
     </div>
 
     <div style="padding: 20px;">

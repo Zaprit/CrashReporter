@@ -65,7 +65,7 @@ func SubmitReportHandler() gin.HandlerFunc {
             context.String(http.StatusInternalServerError, "Failed to submit report, please contact an administrator")
             return
         }
-        context.String(http.StatusCreated, "Your report has been submitted, your report ID is <code>%s</code>", report.ID)
+        context.String(http.StatusCreated, "Your report has been submitted, your report ID is <code>%s</code>", report.UUID)
 
     }
 }

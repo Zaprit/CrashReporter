@@ -2,20 +2,27 @@ package main
 
 import (
     "github.com/Zaprit/CrashReporter/pkg/api"
+    "github.com/Zaprit/CrashReporter/pkg/config"
     "github.com/Zaprit/CrashReporter/pkg/db"
     "github.com/Zaprit/CrashReporter/pkg/web"
     "github.com/gin-gonic/gin"
     "github.com/google/uuid"
+    "log"
 )
 
 func main() {
-    db.OpenDB("test.db")
+    err := config.LoadConfig("config.toml")
+    if err != nil {
+        log.Fatalln(err.Error())
+    }
+
+    db.OpenDB(config.LoadedConfig.DBFile)
     db.MigrateDB()
 
     uuid.EnableRandPool()
 
     router := gin.Default()
-    err := router.SetTrustedProxies(nil)
+    err = router.SetTrustedProxies(nil)
     if err != nil {
         panic(err.Error())
     }
@@ -26,12 +33,14 @@ func main() {
     router.Static("/js", "web/js")
 
     router.GET("/", web.IndexHandler())
-    router.GET("/report", web.ReportHandler())
+    router.GET("/admin/report", web.ReportHandler())
+
+    router.GET("/admin/reports", web.ReportsHandler())
 
     router.POST("/api/v1/report", api.SubmitReportHandler())
-    router.POST("/api/v1/oauth/callback", api.OAuthCallbackHandler())
+    router.GET("/api/v1/oauth/callback", api.OAuthCallbackHandler())
 
-    err = router.Run(":8080")
+    err = router.Run(config.LoadedConfig.ListenAddress)
     if err != nil {
         panic(err)
     }

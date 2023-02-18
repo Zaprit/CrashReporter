@@ -14,7 +14,8 @@ var ValidPlatforms = map[string]struct{} {
 }
 
 type Report struct {
-    ID string `gorm:"primarykey"`
+    ID uint `gorm:"primarykey"`
+    UUID string
     Title string
     Username string
     Type string
@@ -23,12 +24,11 @@ type Report struct {
     Evidence bool
 }
 
-// BeforeCreate will set a UUID rather than numeric ID.
 func (r *Report) BeforeCreate(tx *gorm.DB) error {
     newUuid, err := uuid.NewRandom()
     if err != nil {
         return err
     }
-    r.ID = newUuid.String()
+    r.UUID = newUuid.String()
     return nil
 }
