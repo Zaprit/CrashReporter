@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/styles/primer.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/js/utils.js"></script>
+    <title>Report an Issue with Beacon</title>
+</head>
+<body>
+
+    <div class="Header" style="position: fixed; width: 100%">
+        <div class="Header-item Header-item--full">
+          <a href="/" class="Header-link f4 d-flex flex-items-center">
+            <img width="35" height="35" class="mr-2" src="https://static.wixstatic.com/media/5e70b0_a55a88a3ba0345e68f0a1fad69a555d9~mv2.png" />
+            <span>Report a Beacon Issue</span>
+          </a>
+        </div>
+    </div>
+
+    <div style="padding: 20px;">
+        <div class="Layout Layout--divided">
+            <div class="Layout-main" style="margin-top:65px;">
+
+                <div id="ReportContainer" class="col-10">
+                    {{ range .Notices}}
+                        {{ template "notice.gohtml" .}}
+                    {{ end }}
+
+                    <div class="Box">
+                      <div class="Box-row">
+                        <h3 class="m-0">New Report: Beacon Services Issue
+                        </h3>
+                      </div>
+                      <div class="Box-row">
+                        <form action="/api/v1/report" method="post" id="ReportForm" onSubmit="return submitHandler()">
+
+                            {{ template "report_title.gohtml" .}}
+
+                            {{ template "report_username.gohtml" .}}
+
+                            {{ template "report_issuetype.gohtml" .}}
+
+                            {{ template "report_platforms.gohtml" .}}
+
+                            {{ template "report_description.gohtml" .}}
+
+                            {{ template "report_evidence.gohtml" .}}
+
+                            <div class="form-actions">
+                                <button type="submit" form="ReportForm" class="btn btn-primary">Submit Report</button>
+                            </div>
+                          </form>
+                      </div>
+                    </div>
+                </div>
+
+                <!-- <div class="blankslate">
+                  <img src="https://ghicons.github.com/assets/images/blue/png/Newsfeed.png" alt="" class="blankslate-image" />
+                  <h3 class="blankslate-heading">The reporting flow is unavailable.</h3>
+                  <p>We're probably working on the reporting flow at the moment. Check back soon.</p>
+                  <div class="blankslate-action">
+                    <button class="btn btn-primary" onclick="window.location.href = 'https://discord.gg/lbpunion'" type="button">Join us on Discord</button>
+                  </div>
+                  <div class="blankslate-action">
+                    <button class="btn-link" onclick="window.location.href = 'https://github.com/LBPUnion/ProjectLighthouse/blob/main/README.md'" type="button">Learn more about Project Lighthouse</button>
+                  </div>
+                </div> -->
+
+            </div>
+            <!-- <div class="Layout-divider"></div> -->
+            {{ template "sidebar.html" . }}
+        </div>
+    </div>
+</body>
+</html>
