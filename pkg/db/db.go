@@ -60,4 +60,28 @@ func GetReportCategories() map[string][]string {
     return defaultCategories
 }
 
+func ReportTypeExists(reportType string) bool{
+    categories := GetReportCategories()
+
+    var exists = false
+
+    for _,category := range categories {
+        for _, t := range category {
+            if t == reportType {
+                exists = true
+            }
+        }
+    }
+
+    return exists
+}
+
+func SubmitReport(report *model.Report) error {
+    database.Save(report)
+    if database.Error != nil {
+        return database.Error
+    }
+    return nil
+}
+
 //func Login(username string, password string) model.User

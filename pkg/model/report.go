@@ -13,10 +13,8 @@ var ValidPlatforms = map[string]struct{} {
     "Web: Other": {},
 }
 
-
-
 type Report struct {
-    ID uuid.UUID `gorm:"type:uuid;primarykey;"`
+    ID string `gorm:"primarykey"`
     Title string
     Username string
     Type string
@@ -31,6 +29,6 @@ func (r *Report) BeforeCreate(tx *gorm.DB) error {
     if err != nil {
         return err
     }
-    tx.Model(r).Update("ID", newUuid)
+    r.ID = newUuid.String()
     return nil
 }

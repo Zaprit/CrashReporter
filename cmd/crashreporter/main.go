@@ -1,6 +1,7 @@
 package main
 
 import (
+    "github.com/Zaprit/CrashReporter/pkg/api"
     "github.com/Zaprit/CrashReporter/pkg/db"
     "github.com/Zaprit/CrashReporter/pkg/web"
     "github.com/gin-gonic/gin"
@@ -26,6 +27,9 @@ func main() {
 
     router.GET("/", web.IndexHandler())
     router.GET("/report", web.ReportHandler())
+
+    router.POST("/api/v1/report", api.SubmitReportHandler())
+    router.POST("/api/v1/oauth/callback", api.OAuthCallbackHandler())
 
     err = router.Run(":8080")
     if err != nil {
