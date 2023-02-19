@@ -10,4 +10,5 @@ type Config struct {
 	DBFile             string
 	PublicURL          string
 	Debug              bool
+	LighthouseURL      string
 }

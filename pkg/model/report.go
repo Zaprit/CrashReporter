@@ -14,6 +14,7 @@ var ValidPlatforms = map[string]struct{} {
 }
 
 type Report struct {
+    // ID is for indexing, UUID is so that people can't sequentially guess reports
     ID uint `gorm:"primarykey"`
     UUID string
     Title string
@@ -22,6 +23,7 @@ type Report struct {
     Platform string
     Description string
     Evidence bool
+    Comments []Comment
 }
 
 func (r *Report) BeforeCreate(tx *gorm.DB) error {

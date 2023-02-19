@@ -39,6 +39,8 @@ func main() {
 
     router.POST("/api/v1/report", api.SubmitReportHandler())
     router.GET("/api/v1/oauth/callback", api.OAuthCallbackHandler())
+    router.GET("/api/v1/user/:username", api.LighthouseUsersApiHandler())
+    router.GET("/api/v1/report/:uuid/comments", api.CommentsHandler())
 
     err = router.Run(config.LoadedConfig.ListenAddress)
     if err != nil {

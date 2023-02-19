@@ -30,17 +30,18 @@ func GetNotifications() []model.Notice {
     return Notices
 }
 
-func GetReport(id string) model.Report {
+func GetReport(id string, comments bool) model.Report {
     var Report model.Report
-    database.Where("id = ?", id).First(&Report)
+    if comments {
+        database.Preload("Comments").Where("id = ?", id).First(&Report)
+    } else {
+        database.Where("id = ?", id).First(&Report)
+    }
     return Report
 }
 
-var reportCount = int64(20)
-
-func GetReports(page int) []model.Report {
+func GetReports() []model.Report {
     var Reports []model.Report
-
     database.Find(&Reports)
     return Reports
 }

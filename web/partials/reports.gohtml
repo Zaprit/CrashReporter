@@ -35,7 +35,9 @@
                         {{ range .Reports }}
                             <div id="report-{{ .UUID}}" class="Box-row d-flex flex-items-center">
                                 <div class="flex-auto">
-                                    <strong>{{ .Title }}</strong>
+                                    <strong>{{ .Title }}
+                                    {{ if }}
+                                    </strong>
                                     <div style="overflow: hidden; text-overflow: ellipsis;" class="text-small color-fg-subtle">
                                         {{ .Description }}
                                     </div>
