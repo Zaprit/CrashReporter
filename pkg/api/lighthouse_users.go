@@ -3,6 +3,7 @@ package api
 import (
     "github.com/Zaprit/CrashReporter/pkg/lighthouse_client"
     "github.com/gin-gonic/gin"
+    "net/http"
 )
 
 type uriData struct {
@@ -23,5 +24,19 @@ func LighthouseUsersApiHandler() gin.HandlerFunc {
             context.String(status, err.Error())
         }
         context.String(status, string(data))
+    }
+}
+
+func LghthouseUserSearchApiHandler() gin.HandlerFunc {
+    return func(context *gin.Context) {
+        query := context.Query("s")
+
+        users, err := lighthouse_client.SearchUsers(query)
+
+        if err != nil {
+            context.String(http.StatusInternalServerError, err.Error())
+        }
+
+        context.JSON(http.StatusOK, users)
     }
 }

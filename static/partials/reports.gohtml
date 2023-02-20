@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/static/styles/primer.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="/static/js/utils.js"></script>
+        <script src="/static/js/reports.js"></script>
+        <title>Crashhelper Admin - Reports</title>
+    </head>
+    <body>
+
+        <div class="Header" style="position: fixed; width: 100%">
+            <div class="Header-item Header-item--full">
+                <a href="/admin/reports" class="Header-link f4 d-flex flex-items-center">
+                    <img width="35" height="35" class="mr-2" src="https://static.wixstatic.com/media/5e70b0_a55a88a3ba0345e68f0a1fad69a555d9~mv2.png" />
+                    <span>Reports</span>
+                </a>
+            </div>
+            <div class="Header-item">
+                <div class="f4 d-flex flex-items-center">
+                    <img class="avatar avatar-5 mr-2" alt="User avatar" src="{{ .Avatar }}" />
+                    <span>{{ .Username }}</span>
+                </div>
+            </div>
+            <div class="Header-item"><a href="/api/v1/logout">Logout</a></div>
+        </div>
+
+        <div style="padding: 20px;">
+            <div class="Layout Layout--divided">
+                <div class="Layout-main" style="margin-top:65px;">
+                    <div class="Box">
+                        {{ range .Reports }}
+                            <div id="report-{{ .UUID}}" class="Box-row d-flex flex-items-center">
+                                <div class="flex-auto">
+                                    <strong>{{ .Title }}
+
+                                    </strong>
+                                    <div style="overflow: hidden; text-overflow: ellipsis;" class="text-small color-fg-subtle">
+                                        {{ .Description }}
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-danger" type="button" onclick="">Dismiss</button>
+                                <a class="btn btn-primary" href="/admin/report?id={{ .UUID }}">View</a>
+                            </div>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ template "admin_sidebar.html" .}}
+            </div>
+        </div>
+    </body>
+</html>

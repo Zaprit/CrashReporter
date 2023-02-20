@@ -1,0 +1,20 @@
+<div class="form-group">
+  <div class="form-group-header">
+    <label for="IssueType">What kind of issue are you encountering? <span class="color-fg-danger text-bold">*</span></label>
+  </div>
+  <div class="form-group-body">
+    <select required class="form-select" name="issuetype" id="IssueType">
+
+
+      <option>Choose an option</option>
+
+      {{ range $Name, $Types := .ReportCategories }}
+        <option disabled>*** {{ $Name }} ***</option>
+        {{ range $Type := $Types}}
+        <option>{{ $Type }}</option>
+        {{ end }}
+      {{ end }}
+
+    </select>
+  </div>
+</div>

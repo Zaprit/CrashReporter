@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/static/styles/primer.css" rel="stylesheet" type="text/css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <title>Report an Issue with Beacon</title>
+        <script src="/static/js/utils.js"></script>
+    </head>
+    <body>
+        <div class="Header" style="position: fixed; width: 100%">
+            <div class="Header-item Header-item--full">
+                <a href="/" class="Header-link f4 d-flex flex-items-center">
+                    <img width="35" height="35" class="mr-2"
+                         src="https://static.wixstatic.com/media/5e70b0_a55a88a3ba0345e68f0a1fad69a555d9~mv2.png"
+                         alt="Crashhelper Logo"/>
+                    <span>Report a Beacon Issue</span>
+                </a>
+            </div>
+
+            <!-- Login widget, for admins -->
+            <div class="Header-item">
+                <div class="f4 d-flex flex-items-center">
+                    <img class="avatar avatar-5 mr-2" alt="User avatar" src="{{ .Avatar }}" />
+                    <span>{{ .Username }}</span>
+                </div>
+            </div>
+            <div class="Header-item"><a href="/api/v1/logout">Logout</a></div>
+        </div>
+
+        <div style="padding: 20px;">
+            <div class="Layout Layout--divided">
+                <div class="Layout-main" style="margin-top:65px;">
+                    <div id="ReportContainer" class="col-10">
+                        <div class="Box">
+                            <div class="Box-row">
+                                <h3 class="m-0">{{ .Report.Name}}
+                                    {{ if .Resolved}}
+                                        {{ template "resolved_report.html" .}}
+                                    {{else}}
+                                        {{ template "open_report.html" .}}
+                                    {{end}}
+                                </h3>
+
+                            </div>
+
+                            <% if (ReportExists === true) { %>
+
+                            <div class="Box-row">
+                                <div class="mb-2">
+                                    <span class="text-bold">Report Title</span>
+                                    <span class="text-mono ml-1"><%= rTitle %></span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="text-bold">Beacon Username</span>
+                                    <span class="text-mono ml-1"><%= rBeaconUsername %></span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="text-bold">Issue Type</span>
+                                    <span class="text-mono ml-1"><%= rIssueType %></span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="text-bold">Platform</span>
+                                    <span class="text-mono ml-1"><%= rPlatform %></span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="text-bold">Evidence Available?</span>
+                                    <span class="text-mono ml-1"><%= rEvidenceAvailable %></span>
+                                </div>
+                                <hr/>
+                                <div class="mb-2">
+                                    <div class="form-group">
+                                        <div class="form-group-body">
+                                            <textarea style="color: white;" class="text-mono form-control" readonly="readonly"><%= rExtendedDescription %></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div class="d-flex">
+                                    <p class="text-small">
+                                        Submitted at <span class="branch-name"><%= rTimeStamp %></span> by <span
+                                                class="branch-name"><%= rSubmitterIpAddress %></span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <% } %>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- <div class="Layout-divider"></div> -->
+                {{ template "sidebar.html" . }}
+            </div>
+        </div>
+    </body>
+</html>

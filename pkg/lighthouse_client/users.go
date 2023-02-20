@@ -8,6 +8,7 @@ import (
     "github.com/Zaprit/CrashReporter/pkg/model"
     "io"
     "net/http"
+    "net/url"
 )
 
 //TODO: write user search API in Lighthouse
@@ -23,7 +24,9 @@ func GetUserRaw(name string) ([]byte,int, error) {
     }
 
     body, err := io.ReadAll(resp.Body)
-    defer resp.Body.Close()
+    defer func () {
+        _ = resp.Body.Close()
+    }()
 
     if err != nil {
         return nil, resp.StatusCode, err
@@ -32,12 +35,38 @@ func GetUserRaw(name string) ([]byte,int, error) {
     return body, resp.StatusCode, nil
 }
 
-func GetUser(name string) (model.LighthouseUser, error) {
-    jsonData, err := GetUserRaw(name)
+func GetUser(name string) (model.LighthouseUser, int, error) {
+    jsonData, status, err := GetUserRaw(name)
 
     var user model.LighthouseUser
 
     err = json.Unmarshal(jsonData, &user)
 
-    return user, err
+    return user, status, err
+}
+
+func SearchUsers(query string) ([]model.LighthouseUser, error) {
+    resp, err := http.Get(fmt.Sprintf("%s/api/v1/username?query=%s", config.LoadedConfig.LighthouseURL, url.QueryEscape(query)))
+    if err != nil {
+        return nil, err
+    }
+
+    if resp.StatusCode != 200 {
+        return nil, errors.New(resp.Status)
+    }
+
+    body, err := io.ReadAll(resp.Body)
+    defer func () {
+        _ = resp.Body.Close()
+    }()
+
+    if err != nil {
+        return nil, err
+    }
+
+    var users []model.LighthouseUser
+
+    err = json.Unmarshal(body, &users)
+
+    return users, err
 }
