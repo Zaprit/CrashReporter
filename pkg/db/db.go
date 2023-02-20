@@ -2,10 +2,11 @@ package db
 
 import (
 	"errors"
+	"time"
+
 	"github.com/Zaprit/CrashReporter/pkg/model"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
-	"time"
 )
 
 var database *gorm.DB
@@ -98,6 +99,14 @@ func SubmitReport(report *model.Report) error {
 func SaveSession(session *model.Session) error {
 	database.Where("username = ?", session.Username).Delete(&model.Session{})
 	database.Save(session)
+	if database.Error != nil {
+		return database.Error
+	}
+	return nil
+}
+
+func EndSession(sessionID string) error {
+	database.Where("id = ?", sessionID).Delete(&model.Session{})
 	if database.Error != nil {
 		return database.Error
 	}
