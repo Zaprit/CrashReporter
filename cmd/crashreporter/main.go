@@ -7,6 +7,7 @@ import (
 	"github.com/Zaprit/CrashReporter/pkg/web"
 	"github.com/gin-gonic/gin"
 	"log"
+)
 
 func main() {
 	err := config.LoadConfig("config.toml")
