@@ -1,12 +1,13 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Zaprit/CrashReporter/pkg/api"
 	"github.com/Zaprit/CrashReporter/pkg/config"
 	"github.com/Zaprit/CrashReporter/pkg/db"
 	"github.com/Zaprit/CrashReporter/pkg/web"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 func main() {
@@ -38,6 +39,7 @@ func main() {
 	router.GET("/api/v1/oauth/callback", api.OAuthCallbackHandler())
 	router.GET("/api/v1/user/:username", api.LighthouseUsersApiHandler())
 	router.GET("/api/v1/report/:uuid/comments", api.CommentsHandler())
+	router.GET("/api/v1/logout", api.LogoutHandler())
 
 	err = router.Run(config.LoadedConfig.ListenAddress)
 	if err != nil {
