@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" lang="en">
+<head>
+  <title>Page Not Found</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/static/styles/primer.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="/static/js/utils.js"></script>
+</head>
+<body>
+
+{{ template "menubar.gohtml" . }}
+
+<div style="padding: 20px;">
+    <div class="Layout-main" style="margin-top:65px;">
+      <div class="blankslate blankslate-large">
+        <img src="/static/img/page-not-found.png" alt="m88youngling holding a sign" class="blankslate-image" />
+        <h3 class="blankslate-heading">Not Found</h3>
+        <p class="align-center">Our highly trained Union Intelligence agents looked all over for the content requested but could not find it.
+          Click the button below to go back home
+        </p>
+        <div class="blankslate-action">
+          <a class="btn btn-primary" href="/">Return to home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

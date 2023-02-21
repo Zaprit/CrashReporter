@@ -9,9 +9,12 @@ import (
 func ReportHandler() gin.HandlerFunc {
 	return func(context *gin.Context) {
 
+		report := db.GetReport(context.Query("id"))
+
 		context.HTML(http.StatusOK, "report.gohtml", gin.H{
-			"Notices": db.GetNotifications(),
-			"Report":  db.GetReport(context.Query("id"), true),
+			"Notices":  db.GetNotifications(),
+			"Report":   report,
+			"Comments": db.GetComments(report.ID),
 		})
 	}
 }

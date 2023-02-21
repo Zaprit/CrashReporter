@@ -1,10 +1,31 @@
-<img width="35" height="35" class="mr-2" src="https://static.wixstatic.com/media/5e70b0_a55a88a3ba0345e68f0a1fad69a555d9~mv2.png" />
 <div class="Header" style="position: fixed; width: 100%">
     <div class="Header-item Header-item--full">
+        <img class="mr-2"
+             height="35"
+             width="35"
+             src="/static/img/crashhelper.png"
+             alt="Crashhelper Logo"/>
         <a href="/" class="Header-link f4 d-flex flex-items-center">
             <span>Report a Beacon Issue</span>
         </a>
+        {{ if .AdminArea }}
+            <a class="ml-2 Header-link" href="/admin">Dashboard</a>
+            <a class="ml-2 Header-link" href="/admin/reports">Reports</a>
+            <a class="ml-2 Header-link" href="/admin/notices">Notices</a>
+        {{ end }}
     </div>
-    {{ if }}
-    <div class="Header-item"><a href="">Sign In With Github</a></div>
+    {{ if .LoggedIn }}
+        <div class="Header-item">
+            <div class="f4 d-flex flex-items-center">
+                <img class="avatar avatar-5 mr-2" alt="User avatar" src="{{ .Avatar }}" />
+                <span>{{ .Username }}</span>
+            </div>
+        </div>
+        {{ if not .AdminArea }}
+            <div class="Header-item"><a class="btn" href="/admin">Admin Dashboard</a></div>
+        {{ end }}
+        <div class="Header-item"><a class="btn btn-danger" href="/api/v1/logout">Logout</a></div>
+    {{ else }}
+        <div class="Header-item"><a class="btn" href="/login">Admin Login</a></div>
+    {{ end }}
 </div>

@@ -12,42 +12,37 @@
     </head>
     <body>
 
-        <div class="Header" style="position: fixed; width: 100%">
-            <div class="Header-item Header-item--full">
-                <a href="/admin/reports" class="Header-link f4 d-flex flex-items-center">
-                    <img width="35" height="35" class="mr-2" src="https://static.wixstatic.com/media/5e70b0_a55a88a3ba0345e68f0a1fad69a555d9~mv2.png" />
-                    <span>Reports</span>
-                </a>
-            </div>
-            <div class="Header-item">
-                <div class="f4 d-flex flex-items-center">
-                    <img class="avatar avatar-5 mr-2" alt="User avatar" src="{{ .Avatar }}" />
-                    <span>{{ .Username }}</span>
-                </div>
-            </div>
-            <div class="Header-item"><a href="/api/v1/logout">Logout</a></div>
-        </div>
+        {{ template "menubar.gohtml" .}}
 
         <div style="padding: 20px;">
             <div class="Layout Layout--divided">
+
                 <div class="Layout-main" style="margin-top:65px;">
-                    <div class="Box">
-                        {{ range .Reports }}
-                            <div id="report-{{ .UUID}}" class="Box-row d-flex flex-items-center">
-                                <div class="flex-auto">
-                                    <strong>{{ .Title }}
+                    {{ if .Reports}}
+                        <div class="Box">
+                                {{ range .Reports }}
+                                    <div id="report-{{ .UUID}}" class="Box-row d-flex flex-items-center">
+                                        <div class="flex-auto">
+                                            <strong>{{ .Title }}
 
-                                    </strong>
-                                    <div style="overflow: hidden; text-overflow: ellipsis;" class="text-small color-fg-subtle">
-                                        {{ .Description }}
+                                            </strong>
+                                            <div style="overflow: hidden; text-overflow: ellipsis;" class="text-small color-fg-subtle">
+                                                {{ .Description }}
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-danger" type="button" onclick="">Dismiss</button>
+                                        <a class="btn btn-primary" href="/admin/report?id={{ .UUID }}">View</a>
                                     </div>
-                                </div>
-
-                                <button class="btn btn-danger" type="button" onclick="">Dismiss</button>
-                                <a class="btn btn-primary" href="/admin/report?id={{ .UUID }}">View</a>
-                            </div>
-                        {{ end }}
-                    </div>
+                                {{ end }}
+                        </div>
+                    {{ else }}
+                        <div class="blankslate">
+                            <svg class="octicon octicon-octoface blankslate-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M11.28 6.78a.75.75 0 0 0-1.06-1.06L7.25 8.69 5.78 7.22a.75.75 0 0 0-1.06 1.06l2 2a.75.75 0 0 0 1.06 0l3.5-3.5Z"></path><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0Zm-1.5 0a6.5 6.5 0 1 0-13 0 6.5 6.5 0 0 0 13 0Z"></path></svg>
+                            <h3 class="blankslate-heading">No reports</h3>
+                            <p>There are currently no reports.</p>
+                        </div>
+                    {{ end }}
                 </div>
                 {{ template "admin_sidebar.html" .}}
             </div>

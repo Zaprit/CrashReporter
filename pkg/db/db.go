@@ -12,7 +12,9 @@ import (
 var database *gorm.DB
 
 func OpenDB(path string) {
-	db, err := gorm.Open(sqlite.Open(path), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
+		PrepareStmt: true,
+	})
 	if err != nil {
 		panic(err.Error())
 	}
@@ -20,7 +22,14 @@ func OpenDB(path string) {
 }
 
 func MigrateDB() {
-	err := database.AutoMigrate(&model.Notice{}, &model.Report{}, &model.ReportCategory{}, &model.ReportType{}, &model.Session{})
+	err := database.AutoMigrate(
+		&model.Notice{},
+		&model.Report{},
+		&model.ReportCategory{},
+		&model.ReportType{},
+		&model.Session{},
+		&model.Comment{},
+	)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -32,14 +41,27 @@ func GetNotifications() []model.Notice {
 	return Notices
 }
 
-func GetReport(id string, comments bool) model.Report {
+func GetReport(uuid string) model.Report {
 	var report model.Report
-	if comments {
-		database.Preload("Comments").Where("uuid = ?", id).First(&report)
-	} else {
-		database.Where("uuid = ?", id).First(&report)
-	}
+	database.Where("uuid = ?", uuid).First(&report)
 	return report
+}
+
+func GetReportID(uuid string) (uint, error) {
+	var report model.Report
+	database.Where("uuid = ?", uuid).First(&report)
+	if database.RowsAffected == 0 {
+		return 0, errors.New("report not found")
+	}
+	return report.ID, nil
+}
+
+func ReadReport(uuid string) {
+	database.Model(&model.Report{}).Where("uuid = ?", uuid).Update("read", true)
+}
+
+func UnreadReport(uuid string) {
+	database.Model(&model.Report{}).Where("uuid = ?", uuid).Update("read", false)
 }
 
 func GetReports() []model.Report {
@@ -70,6 +92,16 @@ func GetReportCategories() map[string][]string {
 	}
 
 	return defaultCategories
+}
+
+func GetComments(reportID uint) []model.Comment {
+	var comments []model.Comment
+	database.Where("report_id = ?", reportID).Find(&comments)
+	return comments
+}
+
+func PostComment(comment model.Comment) {
+	database.Save(comment)
 }
 
 func ReportTypeExists(reportType string) bool {
@@ -116,7 +148,7 @@ func EndSession(sessionID string) error {
 func GetSession(sessionID string) (model.Session, error) {
 
 	var session model.Session
-	database.Where("id = ?", sessionID).First(&session)
+	database.Where("id = ?", sessionID).Limit(1).Find(&session)
 
 	if session.ID == "" {
 		return model.Session{}, errors.New("invalid session")

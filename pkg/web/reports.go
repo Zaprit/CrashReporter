@@ -8,17 +8,8 @@ import (
 
 func ReportsHandler() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		sessionID, err := context.Cookie("session_id")
-		if err != nil {
-			context.HTML(http.StatusUnauthorized, "unauthorized.gohtml", nil)
-			return
-		}
-		session, err := db.GetSession(sessionID)
-		if err != nil {
-			context.HTML(http.StatusUnauthorized, "unauthorized.gohtml", nil)
-			return
-		}
-
+		userName := context.GetString("session_user")
+		avatarURL := context.GetString("session_avatar")
 		// TODO: actually write this later
 		//var skip int
 		//
@@ -34,10 +25,12 @@ func ReportsHandler() gin.HandlerFunc {
 		reports := db.GetReports()
 
 		context.HTML(http.StatusOK, "reports.gohtml", gin.H{
-			"Notices":  db.GetNotifications(),
-			"Username": session.Username,
-			"Avatar":   session.AvatarURL,
-			"Reports":  reports,
+			"LoggedIn":  userName != "",
+			"Username":  userName,
+			"Avatar":    avatarURL,
+			"AdminArea": true,
+			"Notices":   db.GetNotifications(),
+			"Reports":   reports,
 		})
 	}
 }

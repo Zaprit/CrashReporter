@@ -22,11 +22,13 @@ type Report struct {
 	UUID        string
 	Title       string
 	Username    string
+	Avatar      string `gorm:"-"`
 	Type        string
 	Platform    string
 	Description string
 	Resolved    bool
 	Evidence    bool
+	Read        bool
 	SubmitterIP string
 	SubmitTime  time.Time
 	Comments    []Comment

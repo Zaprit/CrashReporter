@@ -5,21 +5,12 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="/styles/primer.css" rel="stylesheet" type="text/css" />
+        <link href="/static/styles/primer.css" rel="stylesheet" type="text/css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="/js/utils.js"></script>
+        <script src="/static/js/utils.js"></script>
     </head>
     <body>
-        <div class="Header" style="position: fixed; width: 100%">
-            <div class="Header-item Header-item--full">
-                <a href="/" class="Header-link f4 d-flex flex-items-center">
-                    <img width="35" height="35" class="mr-2" src="https://static.wixstatic.com/media/5e70b0_a55a88a3ba0345e68f0a1fad69a555d9~mv2.png" />
-                    <span>Report a Beacon Issue</span>
-                </a>
-            </div>
-        </div>
-
-
+        {{ template "menubar.gohtml" .}}
 
         <div style="padding: 20px;">
             <div class="Layout Layout--divided">
@@ -29,7 +20,7 @@
                         <h3 class="blankslate-heading">Login Error</h3>
                         <p>{{ .ErrorDescription }}</p>
                         <div class="blankslate-action">
-                            <a class="btn-link" href="/">Return to home</a>
+                            <a class="btn btn-primary" href="/">Return to home</a>
                         </div>
                     </div>
                 </div>
