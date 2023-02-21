@@ -1,12 +1,14 @@
 package api
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/Zaprit/CrashReporter/pkg/db"
 	"github.com/Zaprit/CrashReporter/pkg/lighthouse_client"
 	"github.com/Zaprit/CrashReporter/pkg/model"
+	"github.com/Zaprit/CrashReporter/pkg/webhook"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"time"
 )
 
 func SubmitReportHandler() gin.HandlerFunc {
@@ -77,6 +79,9 @@ func SubmitReportHandler() gin.HandlerFunc {
 			context.String(http.StatusInternalServerError, "Failed to submit report, please contact an administrator")
 			return
 		}
+
+		go webhook.Sendreport(report)
+
 		context.String(http.StatusCreated, "Your report has been submitted, your report ID is <code>%s</code>", report.UUID)
 
 	}
