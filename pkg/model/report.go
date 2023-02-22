@@ -1,10 +1,11 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
-import "github.com/google/uuid"
 
 var ValidPlatforms = map[string]struct{}{
 	"PlayStation 3":                        {},
@@ -18,20 +19,22 @@ var ValidPlatforms = map[string]struct{}{
 
 type Report struct {
 	// ID is for indexing, UUID is so that people can't sequentially guess reports
-	ID          uint `gorm:"primarykey"`
-	UUID        string
-	Title       string
-	Username    string
-	Avatar      string `gorm:"-"`
-	Type        string
-	Platform    string
-	Description string
-	Resolved    bool
-	Evidence    bool
-	Read        bool
-	SubmitterIP string
-	SubmitTime  time.Time
-	Comments    []Comment
+	ID               uint `gorm:"primarykey"`
+	UUID             string
+	Title            string
+	Username         string
+	Avatar           string `gorm:"-"`
+	Type             string
+	Platform         string
+	Description      string
+	Resolved         bool
+	Evidence         bool
+	Read             bool
+	SubmitterIP      string
+	SubmitTime       time.Time
+	Comments         []Comment
+	Priority         string
+	DiscordMessageID string
 }
 
 func (r *Report) BeforeCreate(tx *gorm.DB) error {

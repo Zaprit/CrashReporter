@@ -2,39 +2,43 @@ package webhook
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/Zaprit/CrashReporter/pkg/config"
 	"github.com/Zaprit/CrashReporter/pkg/model"
-	"github.com/gtuk/discordwebhook"
+	"github.com/disgoorg/disgo/discord"
+	"github.com/disgoorg/disgo/webhook"
 )
 
-func Sendreport(report model.Report) {
-
-	var username = "BotUser"
-	var content = "This is a test message"
-	var url = "https://discord.com/api/webhooks/1077711746413899946/xqFikJU4fJTw89S7rLi9qVnQjFNkg7eDeJMETS2lnQotZ55wo4CKPbTV_cJvmhrs5OQZ"
-	reporturl := fmt.Sprintf("[View report](http://%s/report/%s)", config.LoadedConfig.PublicURL, report.UUID)
-
-	message := discordwebhook.Message{
-		Username: &username,
-		Content:  &content,
-		Embeds: &[]discordwebhook.Embed{
-			{
-				Title:       &report.Title,
-				Description: &reporturl,
-				Fields: &[]discordwebhook.Field{
-					{
-						Value: &reporturl,
-					},
-				},
-			},
-		},
-	}
-
-	err := discordwebhook.SendMessage(url, message)
+func Sendreport(report model.Report) (string, error) {
+	client, err := webhook.NewWithURL(config.LoadedConfig.DiscordWebhook)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
+	}
+	evidenceAvailable := "Evidence is not available"
+
+	if report.Priority == "" {
+		report.Priority = "Not Set"
 	}
 
+	if report.Evidence {
+		evidenceAvailable = "Evidence is available"
+	}
+
+	message, err := client.CreateEmbeds([]discord.Embed{
+		discord.NewEmbedBuilder().
+			SetTitle(report.Title).
+			SetDescriptionf("[View report](http://%s/report/%s)", config.LoadedConfig.PublicURL, report.UUID).
+			AddField("Issue Type", report.Type, false).
+			AddField("Issue Priority", report.Priority, false).
+			AddField("Platform", report.Platform, false).
+			AddField("Report Details", fmt.Sprintf("```\n%s\n```", report.Description), false).
+			AddField("Is Evidence Available?", evidenceAvailable, false).
+			SetTimestamp(report.SubmitTime).
+			SetFooterTextf("This report was submitted by %s", report.Username).Build(),
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return message.ID.String(), nil
 }
