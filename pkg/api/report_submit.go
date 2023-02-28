@@ -1,14 +1,12 @@
 package api
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/Zaprit/CrashReporter/pkg/db"
 	"github.com/Zaprit/CrashReporter/pkg/lighthouse_client"
 	"github.com/Zaprit/CrashReporter/pkg/model"
 	"github.com/Zaprit/CrashReporter/pkg/webhook"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func SubmitReportHandler() gin.HandlerFunc {
@@ -16,11 +14,10 @@ func SubmitReportHandler() gin.HandlerFunc {
 		report := model.Report{
 			Title:       context.PostForm("title"),
 			Username:    context.PostForm("username"),
-			Type:        context.PostForm("issuetype"),
+			Type:        context.PostForm("issue_type"),
 			Platform:    context.PostForm("platform"),
 			Description: context.PostForm("details"),
 			SubmitterIP: context.RemoteIP(),
-			SubmitTime:  time.Now().UTC(),
 			Evidence:    false,
 		}
 

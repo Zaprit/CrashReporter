@@ -14,11 +14,9 @@ type ReportURI struct {
 
 func CommentsHandler() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var data ReportURI
+		uuid := context.Param("uuid")
 
-		_ = context.BindUri(&data)
-
-		report, err := db.GetReportID(data.ReportUUID)
+		report, err := db.GetReportID(uuid)
 		if err != nil {
 			context.String(http.StatusNotFound, "Report Not Found")
 			return
@@ -32,15 +30,13 @@ func CommentsHandler() gin.HandlerFunc {
 
 func PostCommentHandler() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var data ReportURI
-		_ = context.BindUri(&data)
+		uuid := context.Param("uuid")
 
 		user := context.GetString("session_user")
-		avatar := context.GetString("session_user")
+		avatar := context.GetString("session_avatar")
 
-		id, err := db.GetReportID(data.ReportUUID)
+		id, err := db.GetReportID(uuid)
 		if err != nil {
-			context.Error(err)
 			context.String(http.StatusNotFound, "Report does not exist")
 			return
 		}
@@ -49,7 +45,7 @@ func PostCommentHandler() gin.HandlerFunc {
 			Poster:       user,
 			PosterAvatar: avatar,
 			ReportID:     id,
-			CreateTime:   time.Time{},
+			CreateTime:   time.Now(),
 			Content:      context.PostForm("content"),
 		}
 

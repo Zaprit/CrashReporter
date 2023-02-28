@@ -5,15 +5,15 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
 function buildComment(commentData) {
     let comment = document.createElement("div")
 
-    comment.setAttribute("class", "box")
+    comment.setAttribute("class", "Box mt-2")
     comment.innerHTML = `
         <div class="Box-header">
             <img class="avatar avatar-5 mr-2" alt="User avatar" src="${commentData.poster_avatar}" />
             ${commentData.poster}
-            <span class="branch-name float-right pt-1">${time}</span>
+            <span class="branch-name float-right pt-1">${commentData.create_time}</span>
         </div>
         <div class="Box-body">
-            ${comment.content}
+            ${commentData.content}
         </div>
     `;
 
@@ -22,18 +22,18 @@ function buildComment(commentData) {
 
 async function updateComments() {
 
-    let comments = await fetch(`/api/v1/report/${params.id}/comments`).then((res) => {
-        if (res.status !== 200) {
-            return "Failed to load comments";
-        }
-        return res.json();
-    });
+    let comments = await fetch(`/api/v1/report/${params.id}/comments`);
+
+    if (comments.status !== 200) {
+        return;
+    }
+    comments = await comments.json();
 
     let commentContainer = document.getElementById("comment_container");
     commentContainer.replaceChildren();
 
 
-    for (let comment in comments) {
+    for (const comment of comments) {
         let commentElement = buildComment(comment);
         commentContainer.append(commentElement);
     }
@@ -48,13 +48,13 @@ function postComment() {
     const FD = new FormData(form);
 
     // Define what happens on successful data submission
-    XHR.addEventListener("load", (event) => {
-
+    XHR.addEventListener("load", async (event) => {
+        await updateComments();
     });
 
     // Define what happens in case of error
     XHR.addEventListener("error", (event) => {
-        alert('Oops! Something went wrong.');
+        alert('Failed to post comment.');
     });
 
     // Set up our request
@@ -67,3 +67,7 @@ function postComment() {
 }
 
 window.setInterval(updateComments, 15000);
+
+window.addEventListener("load", async () => {
+    await updateComments();
+});

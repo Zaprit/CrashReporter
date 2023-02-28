@@ -31,7 +31,7 @@ type Report struct {
 	Evidence         bool
 	Read             bool
 	SubmitterIP      string
-	SubmitTime       time.Time
+	SubmitTime       time.Time `gorm:"autoCreateTime"`
 	Comments         []Comment
 	Priority         string
 	DiscordMessageID string

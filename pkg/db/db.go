@@ -50,9 +50,10 @@ func GetReport(uuid string) model.Report {
 func GetReportID(uuid string) (uint, error) {
 	var report model.Report
 	database.Where("uuid = ?", uuid).First(&report)
-	if database.RowsAffected == 0 {
-		return 0, errors.New("report not found")
+	if database.Error != nil {
+		return 0, database.Error
 	}
+
 	return report.ID, nil
 }
 
@@ -96,12 +97,12 @@ func GetReportCategories() map[string][]string {
 
 func GetComments(reportID uint) []model.Comment {
 	var comments []model.Comment
-	database.Where("report_id = ?", reportID).Find(&comments)
+	database.Where("report_id = ?", reportID).Order("create_time DESC").Find(&comments)
 	return comments
 }
 
 func PostComment(comment model.Comment) {
-	database.Save(comment)
+	database.Save(&comment)
 }
 
 func ReportTypeExists(reportType string) bool {

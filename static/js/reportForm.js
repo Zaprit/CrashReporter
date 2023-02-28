@@ -63,7 +63,7 @@ function sendData() {
 
         let toastEl = document.createElement("div");
         toastEl.setAttribute("id", "statusToast");
-        toastEl.setAttribute("class", `Toast ${toastFlag}`);
+        toastEl.setAttribute("class", `Toast ${toastFlag} position-fixed bottom-0 right-0 mb-3 ml-3`);
         toastEl.innerHTML = `
             ${icon}
             <span class="Toast-content">${XHR.response}</span>
