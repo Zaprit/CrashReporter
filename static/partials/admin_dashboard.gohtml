@@ -15,9 +15,16 @@
 <div style="padding: 20px;">
     <div class="Layout">
         <div class="Layout-main" style="margin-top:65px;">
+            {{ template "admin_dashboard_reports.gohtml" .}}
+
+
             <div class="">
-                {{ template "admin_dashboard_reports.gohtml" .}}
-                {{ template "admin_dashboard_notices.gohtml" .}}
+                <div>
+                    {{ template "admin_dashboard_notices.gohtml" .}}
+                </div>
+                <div>
+                    {{ template "admin_dashboard_categories.gohtml" .}}
+                </div>
             </div>
         </div>
     </div>

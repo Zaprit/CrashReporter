@@ -23,6 +23,7 @@ type Report struct {
 	UUID             string
 	Title            string
 	Username         string
+	UserID           uint
 	Avatar           string `gorm:"-"`
 	Type             string
 	Platform         string

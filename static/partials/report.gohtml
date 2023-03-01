@@ -4,84 +4,107 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/styles/primer.css" rel="stylesheet" type="text/css" />
+    <link href="/static/styles/primer.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Report an Issue with Beacon</title>
-    <script src="/js/utils.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/comments.js"></script>
+
+    <meta property="og:site_name" content="CrashHelper" />
+    <meta content="{{ .ReportTitle }}" property="og:title" />
+    <meta content="{{ .ReportSummary }}" property="og:description" />
+    <meta content="/" property="og:url" />
+    <meta content="/static/img/CrashHelper.png" property="og:image" />
+    <meta content="#15ba15" data-react-helmet="true" name="theme-color" />
+    <meta name="twitter:description" content="{{ .ReportSummary }}" />
 </head>
 <body>
+{{ template "menubar.gohtml" .}}
 
-    {{ template "menubar.gohtml" .}}
-
-    <div style="padding: 20px;">
-        <div class="Layout Layout--divided">
-            <div class="Layout-main" style="margin-top:65px;">
-
-                  <div id="ReportContainer" class="col-10">
-                    <div class="Box">
-                      <div class="Box-row">
-                        <h3 class="m-0">Report {{ .ReportId }}
+<div style="padding: 20px;">
+    <div class="Layout Layout--divided">
+        <div class="Layout-main" style="margin-top:65px;">
+            <div id="ReportContainer" class="col-10">
+                <div class="Box">
+                    <div class="Box-row">
+                        <h3 class="m-0"> {{ .ReportTitle }}
+                            {{ if .ReportResolved }}
+                                {{ template "resolved_report.html" }}
+                            {{else}}
+                                {{ template "open_report.html" }}
+                            {{end}}
+                            <span class="branch-name float-right mt-2">{{ .ReportUUID }}</span>
+                            {{ if .AdminArea }}
+                                {{ template "report_buttons.gohtml" .}}
+                            {{ end }}
                         </h3>
-                        {{if .ReportExists }}
-                            <div class="flash mt-3 flash-warn">
-                                <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M8.22 1.754a.25.25 0 00-.44 0L1.698 13.132a.25.25 0 00.22.368h12.164a.25.25 0 00.22-.368L8.22 1.754zm-1.763-.707c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0114.082 15H1.918a1.75 1.75 0 01-1.543-2.575L6.457 1.047zM9 11a1 1 0 11-2 0 1 1 0 012 0zm-.25-5.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z"></path></svg>
-                                This report is currently under review by our engineers. <% if (ShowSensitive === true) { %><a href="/api/v1/administration/resolve/<%= ReportId %>">Mark as resolved</a><% } %>
-                            </div>
-                        {{ else }}
-                            <div class="flash mt-3 flash-success">
-                                <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg>
-                                This report has been marked as resolved.
-                            </div>
-                        {{ end }}
-                      </div>
 
-                      <% if (ReportExists === true) { %>
+                        <div>
+                            <img class="avatar avatar-5 mr-2" alt="User avatar" src="{{ .ReportAvatar }}" />
+                            {{ .ReportUser }}
+                        </div>
+                    </div>
 
-                          <div class="Box-row">
-                            <div class="mb-2">
-                              <span class="text-bold">Report Title</span>
-                              <span class="text-mono ml-1"><%= rTitle %></span>
-                            </div>
-                            <div class="mb-2">
-                              <span class="text-bold">Beacon Username</span>
-                              <span class="text-mono ml-1"><%= rBeaconUsername %></span>
-                            </div>
-                            <div class="mb-2">
-                              <span class="text-bold">Issue Type</span>
-                              <span class="text-mono ml-1"><%= rIssueType %></span>
-                            </div>
-                            <div class="mb-2">
-                              <span class="text-bold">Platform</span>
-                              <span class="text-mono ml-1"><%= rPlatform %></span>
-                            </div>
-                            <div class="mb-2">
-                              <span class="text-bold">Evidence Available?</span>
-                              <span class="text-mono ml-1"><%= rEvidenceAvailable %></span>
-                            </div>
-                            <hr />
-                            <div class="mb-2">
-                              <div class="form-group">
+
+                    <div class="Box-row">
+                        <div class="mb-2">
+                            <div class="form-group">
                                 <div class="form-group-body">
-                                    <textarea style="color: white;" class="text-mono form-control" readonly="readonly"><%= rExtendedDescription %></textarea>
+                                    <label for="report_description"><h3 class="m-0">Description</h3></label>
+                                    <textarea id="report_description" class="text-mono form-control" readonly="readonly">{{ .ReportDescription}}</textarea>
                                 </div>
-                              </div>
-                            </div>
-                            <hr />
-                            <div class="d-flex">
-                              <p class="text-small">
-                                  Submitted at <span class="branch-name"><%= rTimeStamp %></span> by <span class="branch-name"><%= rSubmitterIpAddress %></span>
-                              </p>
                             </div>
                         </div>
-
-                    <% } %>
+                        <hr/>
+                        <div class="d-flex">
+                            <p class="text-small">
+                                Submitted at <span class="branch-name">{{ .ReportTime.Format "Monday January 02 2006, 3:04:05 PM" }}</span>
+                                by
+                                <span class="branch-name">
+                                    {{ if .AdminArea }}
+                                        {{ .ReportIP }}
+                                    {{ else }}
+                                        [REDACTED]
+                                    {{ end }}
+                                </span>
+                            </p>
+                        </div>
                     </div>
+
+                </div>
+
+                {{ if .AdminArea}}
+                <div class="Box">
+                    <form id="comment_form">
+                        <div class="input-group">
+                            <input class="form-control" type="text" name="content" placeholder="Comment..." aria-label="Comment Text">
+                            <span class="input-group-button">
+                                        <button class="btn btn-primary" onclick="postComment()" type="button" aria-label="Post Comment">
+                                            <!-- <%= octicon "clippy" %> -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>
+                                        </button>
+                                    </span>
+                        </div>
+                    </form>
+                </div>
+                {{ end }}
+
+                <!-- Comments Start Here -->
+
+                <div id="comment_container" class="mt-2">
+
                 </div>
 
             </div>
-            <!-- <div class="Layout-divider"></div> -->
-           {{ template "sidebar.html" . }}
+
         </div>
+        <!-- <div class="Layout-divider"></div> -->
+        {{ if .AdminArea }}
+            {{ template "admin_sidebar.html" }}
+        {{ else }}
+            {{ template "sidebar.html" }}
+        {{end}}
     </div>
+</div>
 </body>
 </html>

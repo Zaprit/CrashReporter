@@ -42,6 +42,8 @@ func SubmitReportHandler() gin.HandlerFunc {
 			return
 		}
 
+		report.UserID = user.UserId
+
 		if len(report.Description) > 500 {
 			context.String(http.StatusBadRequest, "The description is too long, it must be less than or equal to 500 characters in length")
 			return

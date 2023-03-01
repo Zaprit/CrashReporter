@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/Zaprit/CrashReporter/pkg/config"
 	"github.com/Zaprit/CrashReporter/pkg/db"
 	"github.com/Zaprit/CrashReporter/pkg/lighthouse_client"
 	"github.com/gin-gonic/gin"
@@ -26,12 +27,13 @@ func AdminDashboardHandler() gin.HandlerFunc {
 		}
 
 		context.HTML(http.StatusOK, "admin_dashboard.gohtml", gin.H{
-			"LoggedIn":  userName != "",
-			"Username":  userName,
-			"Avatar":    avatarURL,
-			"AdminArea": true,
-			"Notices":   db.GetNotifications(),
-			"Reports":   reports,
+			"LoggedIn":      userName != "",
+			"LighthouseURL": config.LoadedConfig.LighthouseURL,
+			"Username":      userName,
+			"Avatar":        avatarURL,
+			"AdminArea":     true,
+			"Notices":       db.GetNotifications(),
+			"Reports":       reports,
 		})
 	}
 }

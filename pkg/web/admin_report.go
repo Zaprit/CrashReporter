@@ -27,7 +27,10 @@ func AdminReportHandler() gin.HandlerFunc {
 			reportAvatar = lighthouse_client.UserAvatar(user)
 		}
 
-		context.HTML(http.StatusOK, "admin_report.gohtml", gin.H{
+		report.Read = true
+		_ = db.SubmitReport(&report) // We don't care if the read indicator doesn't get set, it's not an issue
+
+		context.HTML(http.StatusOK, "report.gohtml", gin.H{
 			"LoggedIn":          userName != "",
 			"Username":          userName,
 			"Avatar":            avatarURL,

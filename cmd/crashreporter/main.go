@@ -28,7 +28,7 @@ func main() {
 
 	router.LoadHTMLGlob("static/partials/*")
 
-	router.StaticFile("/favicon.png", "static/img/crashhelper.png")
+	router.StaticFile("/favicon.png", "static/img/CrashHelper.png")
 
 	router.Static("/static/styles", "static/styles")
 	router.Static("/static/img", "static/img")
@@ -39,6 +39,7 @@ func main() {
 	publicPages := router.Group("/", middleware.SessionMiddleware())
 	publicPages.GET("/", web.IndexHandler())
 	publicPages.GET("/login", web.LoginHandler())
+	publicPages.GET("/report", web.ReportHandler())
 
 	adminPages := router.Group("/admin", middleware.SessionMiddleware(), middleware.AuthorizationMiddleware())
 	adminPages.GET("/report", web.AdminReportHandler())

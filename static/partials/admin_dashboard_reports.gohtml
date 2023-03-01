@@ -1,27 +1,37 @@
-<div class="Box">
-    <a href="/admin/reports">
+<div class="Box m-1">
+
     <div class="Box-header">
         <h3 class="Box-title">
-            Reports
+            <a class="Link--muted" href="/admin/reports">Reports</a>
         </h3>
     </div>
     <div class="Box-body">
         <div class="Box">
             {{ if .Reports }}
                 {{ range .Reports }}
-                    {{ if .Read }}
-                    <div class="Box-row">
-                    {{ else }}
-                    <div class="Box-row Box-row--unread">
-                    {{ end }}
-                        {{ .Title }}
+                    <div class="Box-row {{ if not .Read }}Box-row--unread"{{ end }}>
+                        <div class="d-flex">
+                            <div class="col-3">
+                        <a class="mr-5 Link--muted" href="/admin/report?id={{ .UUID }}">{{ .Title }}</a>
+                            </div>
+                            <div class="col-3">
                         {{ if .Resolved }}
                             {{ template "resolved_report.html" .}}
                         {{else}}
                             {{ template "open_report.html" .}}
                         {{end}}
-                        <img class="avatar avatar-5 mr-2" alt="User avatar" src="{{ .Avatar }}" />
-                        {{ .Username }}
+                            </div>
+
+
+                        <div class="col-6">
+                            <div class="float-right">
+                            <a class="Link--muted" href="{{ $.LighthouseURL }}/user/{{.UserID}}">
+                                <img class="avatar avatar-5 mr-2" alt="User avatar" src="{{ .Avatar }}" />
+                                {{ .Username }}
+                            </a>
+                            </div>
+                        </div>
+                        </div>
                     </div>
                 {{ end }}
             {{ else }}
@@ -33,5 +43,4 @@
             {{ end }}
         </div>
     </div>
-    </a>
 </div>
