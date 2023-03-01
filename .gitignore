@@ -1,2 +1,5 @@
 /config.toml
 /test.db
+*.iml
+/.idea
+/.vscode
