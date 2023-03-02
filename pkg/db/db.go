@@ -121,7 +121,7 @@ func ReportTypeExists(reportType string) bool {
 	return exists
 }
 
-func SubmitReport(report *model.Report) error {
+func SaveReport(report *model.Report) error {
 	database.Save(report)
 	if database.Error != nil {
 		return database.Error

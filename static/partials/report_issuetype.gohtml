@@ -1,20 +1,19 @@
 <div class="form-group">
-  <div class="form-group-header">
-    <label for="IssueType">What kind of issue are you encountering? <span class="color-fg-danger text-bold">*</span></label>
-  </div>
-  <div class="form-group-body">
-    <select required class="form-select" name="issue_type" id="IssueType">
+    <div class="form-group-header">
+        <label for="IssueType">What kind of issue are you encountering? <span class="color-fg-danger text-bold">*</span></label>
+    </div>
+    <div class="form-group-body">
+        <select required class="form-select" name="issue_type" id="IssueType">
+            <option selected disabled>Choose an option</option>
 
+            <option disabled></option>
 
-      <option>Choose an option</option>
-
-      {{ range $Name, $Types := .ReportCategories }}
-        <option disabled>*** {{ $Name }} ***</option>
-        {{ range $Type := $Types}}
-        <option>{{ $Type }}</option>
-        {{ end }}
-      {{ end }}
-
-    </select>
-  </div>
+            {{ range $Name, $Types := .ReportCategories }}
+                <option disabled>{{ $Name }}</option>
+                {{ range $Type := $Types}}
+                    <option>&emsp;{{ $Type }}</option>
+                {{ end }}
+            {{ end }}
+        </select>
+    </div>
 </div>

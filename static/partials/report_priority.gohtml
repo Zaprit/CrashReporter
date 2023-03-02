@@ -1,16 +1,13 @@
 <div class="form-group">
     <div class="form-group-header">
-        <label for="IssueType">What platform are you using? <span class="color-fg-danger text-bold">*</span></label>
+        <label for="Priority">How severe is the issue? <span class="color-fg-danger text-bold">*</span></label>
     </div>
     <div class="form-group-body">
-        <select required class="form-select" name="platform" id="Platform">
-            <option>PlayStation 3</option>
-            <option>PlayStation Vita</option>
-            <option>RPCS3</option>
-            <option>Web: Safari</option>
-            <option>Web: Google Chrome or Chromium Based</option>
-            <option>Web: Firefox</option>
-            <option>Web: Other</option>
+        <select required class="form-select" name="priority" id="Priority">
+            <option disabled selected>Choose an option</option>
+            <option label="Major impacts to one or more core services, severe vulnerability">high</option>
+            <option label="Minor core service disruption, general bug that should be investigated">medium</option>
+            <option label="No noticeable performance/service disruption, but something to look into">low</option>
         </select>
     </div>
 </div>

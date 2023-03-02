@@ -17,6 +17,12 @@ var ValidPlatforms = map[string]struct{}{
 	"Web: Other":                           {},
 }
 
+var Priorities = map[string]uint{
+	"low":    1,
+	"medium": 2,
+	"high":   3,
+}
+
 type Report struct {
 	// ID is for indexing, UUID is so that people can't sequentially guess reports
 	ID               uint `gorm:"primarykey"`
@@ -34,7 +40,7 @@ type Report struct {
 	SubmitterIP      string
 	SubmitTime       time.Time `gorm:"autoCreateTime"`
 	Comments         []Comment
-	Priority         string
+	Priority         uint
 	DiscordMessageID string
 }
 

@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	err := config.LoadConfig("config.toml")
+	err := config.LoadConfig()
 	if err != nil {
 		log.Fatalln(err.Error())
 	}

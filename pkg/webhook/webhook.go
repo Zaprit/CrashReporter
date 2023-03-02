@@ -9,15 +9,28 @@ import (
 	"github.com/disgoorg/disgo/webhook"
 )
 
-func Sendreport(report model.Report) (string, error) {
+func SendReport(report model.Report) (string, error) {
+	if config.LoadedConfig.DiscordWebhook == "" {
+		return "", nil
+	}
+
 	client, err := webhook.NewWithURL(config.LoadedConfig.DiscordWebhook)
 	if err != nil {
 		return "", err
 	}
 	evidenceAvailable := "Evidence is not available"
 
-	if report.Priority == "" {
-		report.Priority = "Not Set"
+	var priority string
+
+	switch report.Priority {
+	case 1:
+		priority = "Low"
+	case 2:
+		priority = "Medium"
+	case 3:
+		priority = "High"
+	default:
+		priority = "Not Set"
 	}
 
 	if report.Evidence {
@@ -27,9 +40,9 @@ func Sendreport(report model.Report) (string, error) {
 	message, err := client.CreateEmbeds([]discord.Embed{
 		discord.NewEmbedBuilder().
 			SetTitle(report.Title).
-			SetDescriptionf("[View report](http://%s/report/%s)", config.LoadedConfig.PublicURL, report.UUID).
+			SetDescriptionf("[View report](%s/report/%s)", config.LoadedConfig.PublicURL, report.UUID).
 			AddField("Issue Type", report.Type, false).
-			AddField("Issue Priority", report.Priority, false).
+			AddField("Issue Priority", priority, false).
 			AddField("Platform", report.Platform, false).
 			AddField("Report Details", fmt.Sprintf("```\n%s\n```", report.Description), false).
 			AddField("Is Evidence Available?", evidenceAvailable, false).
