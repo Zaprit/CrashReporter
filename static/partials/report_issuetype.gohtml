@@ -6,8 +6,6 @@
         <select required class="form-select" name="issue_type" id="IssueType">
             <option selected disabled>Choose an option</option>
 
-            <option disabled></option>
-
             {{ range $Name, $Types := .ReportCategories }}
                 <option disabled>{{ $Name }}</option>
                 {{ range $Type := $Types}}
