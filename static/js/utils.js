@@ -1,7 +1,3 @@
-function generateReportId(min, max) {
-    return Math.random() * (max - min) + min;
-}
-
 //Resize window
 function mobile() {
     if ($(window).width() < 700) {

@@ -40,7 +40,9 @@ func SendReport(report model.Report) (string, error) {
 	message, err := client.CreateEmbeds([]discord.Embed{
 		discord.NewEmbedBuilder().
 			SetTitle(report.Title).
-			SetDescriptionf("[View report](%s/report/%s)", config.LoadedConfig.PublicURL, report.UUID).
+			SetColor(0x15ba15).
+			// TODO: Fix url
+			SetDescriptionf("[View report](http://%s/report?id=%s)", config.LoadedConfig.PublicURL, report.UUID).
 			AddField("Issue Type", report.Type, false).
 			AddField("Issue Priority", priority, false).
 			AddField("Platform", report.Platform, false).

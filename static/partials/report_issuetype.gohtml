@@ -9,7 +9,7 @@
             {{ range $Name, $Types := .ReportCategories }}
                 <option disabled>{{ $Name }}</option>
                 {{ range $Type := $Types}}
-                    <option>&emsp;{{ $Type }}</option>
+                    <option value="{{ $Type }}">&emsp;{{ $Type }}</option>
                 {{ end }}
             {{ end }}
         </select>

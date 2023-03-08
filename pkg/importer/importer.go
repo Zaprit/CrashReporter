@@ -30,6 +30,17 @@ func convertReport(report importer.OldReport, reportName string) model.Report {
 		log.Printf("Failed to parse date on report: %s", reportName)
 	}
 
+	var priority uint = 0
+
+	switch report.IssuePriority {
+	case "High":
+		priority = 3
+	case "Medium":
+		priority = 2
+	case "Low":
+		priority = 1
+	}
+
 	newReport := model.Report{
 		UUID:             reportName,
 		Title:            "(Imported) " + report.Title,
@@ -42,7 +53,7 @@ func convertReport(report importer.OldReport, reportName string) model.Report {
 		SubmitterIP:      report.IpAddress,
 		SubmitTime:       timestamp,
 		Comments:         nil,
-		Priority:         report.IssuePriority,
+		Priority:         priority,
 		DiscordMessageID: "",
 	}
 

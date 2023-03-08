@@ -9,14 +9,20 @@ import (
 	"net/http"
 )
 
-func Truncate(text string, width int) string {
+func truncate(text string, width int) string {
+	if len(text) <= width {
+		return text
+	}
 
 	r := []rune(text)
 	trunc := r[:width]
 	return string(trunc) + "..."
 }
+
 func ReportHandler() gin.HandlerFunc {
 	return func(context *gin.Context) {
+		userName := context.GetString("session_user")
+		avatarURL := context.GetString("session_avatar")
 
 		report := db.GetReport(context.Query("id"))
 
@@ -33,9 +39,17 @@ func ReportHandler() gin.HandlerFunc {
 			reportAvatar = lighthouse_client.UserAvatar(user)
 		}
 
-		summary := Truncate(report.Description, 50)
+		if userName != "" {
+			db.ReadReport(report.UUID)
+		}
+
+		summary := truncate(report.Description, 50)
 		fmt.Println(report.Description)
 		context.HTML(http.StatusOK, "report.gohtml", gin.H{
+			"AdminArea":         context.FullPath() == "/admin/report",
+			"LoggedIn":          userName != "",
+			"Username":          userName,
+			"Avatar":            avatarURL,
 			"Notices":           db.GetNotifications(),
 			"LighthouseURL":     config.LoadedConfig.LighthouseURL,
 			"ReportTitle":       report.Title,

@@ -2,23 +2,41 @@ package main
 
 import (
 	"github.com/Zaprit/CrashReporter/pkg/api"
-	"github.com/Zaprit/CrashReporter/pkg/middleware"
-	"log"
-
 	"github.com/Zaprit/CrashReporter/pkg/config"
 	"github.com/Zaprit/CrashReporter/pkg/db"
+	"github.com/Zaprit/CrashReporter/pkg/importer"
+	"github.com/Zaprit/CrashReporter/pkg/middleware"
 	"github.com/Zaprit/CrashReporter/pkg/web"
 	"github.com/gin-gonic/gin"
+	"io/fs"
+	"log"
 )
 
 func main() {
 	err := config.LoadConfig()
 	if err != nil {
-		log.Fatalln(err.Error())
+		if pathErr, ok := err.(*fs.PathError); ok {
+			config.LoadedConfig = config.DefaultConfig
+			err := config.SaveConfig()
+			if err != nil {
+				log.Fatalln(err.Error())
+			}
+		} else {
+			log.Fatalln(pathErr.Error())
+		}
 	}
 
 	db.OpenDB(config.LoadedConfig.DBFile)
 	db.MigrateDB()
+
+	if config.LoadedConfig.MigrateOld {
+		importer.ImportOldReports()
+		config.LoadedConfig.MigrateOld = false
+		err := config.SaveConfig()
+		if err != nil {
+			log.Println("Error In Migrating Reports ", err.Error())
+		}
+	}
 
 	router := gin.Default()
 	err = router.SetTrustedProxies(nil)
@@ -42,7 +60,7 @@ func main() {
 	publicPages.GET("/report", web.ReportHandler())
 
 	adminPages := router.Group("/admin", middleware.SessionMiddleware(), middleware.AuthorizationMiddleware())
-	adminPages.GET("/report", web.AdminReportHandler())
+	adminPages.GET("/report", web.ReportHandler())
 	adminPages.GET("/reports", web.ReportsHandler())
 	adminPages.GET("/", web.AdminDashboardHandler())
 
