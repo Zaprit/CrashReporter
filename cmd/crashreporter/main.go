@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	// Load Config
 	err := config.LoadConfig()
 	if err != nil {
 		if pathErr, ok := err.(*fs.PathError); ok {
@@ -26,9 +27,31 @@ func main() {
 		}
 	}
 
-	db.OpenDB(config.LoadedConfig.DBFile)
+	// Load DB
+	switch config.LoadedConfig.Database.Type {
+	case db.TypeSqlite:
+		db.OpenSQLiteDB(config.LoadedConfig.Database.Database)
+	case db.TypeMysql:
+		db.OpenMySQLDB(
+			config.LoadedConfig.Database.Hostname,
+			config.LoadedConfig.Database.Port,
+			config.LoadedConfig.Database.Database,
+			config.LoadedConfig.Database.Username,
+			config.LoadedConfig.Database.Password,
+		)
+	case db.TypePostgres:
+		db.OpenPostgreSQLDB(
+			config.LoadedConfig.Database.Hostname,
+			config.LoadedConfig.Database.Port,
+			config.LoadedConfig.Database.Database,
+			config.LoadedConfig.Database.Username,
+			config.LoadedConfig.Database.Password,
+		)
+	}
+
 	db.MigrateDB()
 
+	// Migrate old data
 	if config.LoadedConfig.MigrateOld {
 		importer.ImportOldReports()
 		config.LoadedConfig.MigrateOld = false
@@ -38,6 +61,7 @@ func main() {
 		}
 	}
 
+	// HTTP Router
 	router := gin.Default()
 	err = router.SetTrustedProxies(nil)
 	if err != nil {
@@ -74,10 +98,12 @@ func main() {
 	apiV1.POST("report/:uuid/post_comment", api.PostCommentHandler())
 	apiV1.GET("logout", api.LogoutHandler())
 
+	// 404 Page
 	router.NoRoute(func(context *gin.Context) {
 		context.HTML(404, "not_found.gohtml", nil)
 	})
 
+	// Run router
 	err = router.Run(config.LoadedConfig.ListenAddress)
 	if err != nil {
 		panic(err)
