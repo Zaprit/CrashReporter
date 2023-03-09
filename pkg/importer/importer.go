@@ -25,7 +25,7 @@ func convertReport(report importer.OldReport, reportName string) model.Report {
 		log.Printf("Failed to get lighthouse user for report: %s", reportName)
 	}
 
-	timestamp, err := parseOrdinalDate("January 2 2006 3:4:35 pm", report.Timestamp)
+	timestamp, err := parseOrdinalDate("January 2 2006 3:04:05 pm", report.Timestamp)
 	if err != nil {
 		log.Printf("Failed to parse date on report: %s", reportName)
 	}
@@ -86,6 +86,7 @@ func ImportOldReports() {
 		report, err := importReport(reportData)
 		if err != nil {
 			log.Println("failed to deserialize report: " + reportName)
+			log.Println(err.Error())
 			continue
 		}
 
