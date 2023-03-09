@@ -7,8 +7,8 @@
     </div>
     <div class="Box-body">
         <div class="Box">
-            <ul>
             {{ if .Reports }}
+                <ul>
                 {{ range .Reports }}
                     <li class="Box-row {{ if not .Read }}Box-row--unread{{ end }}">
                         <div class="d-flex">
