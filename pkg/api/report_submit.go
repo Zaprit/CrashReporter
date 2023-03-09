@@ -80,7 +80,7 @@ func SubmitReportHandler() gin.HandlerFunc {
 			return
 		}
 
-		if context.PostForm("hasevidence") == "on" {
+		if context.PostForm("has_evidence") == "on" {
 			report.Evidence = true
 		}
 
