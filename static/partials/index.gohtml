@@ -1,9 +1,13 @@
-{{define "title"}}Report an Issue with Beacon{{end}}
-{{define "head" }}
+<!DOCTYPE html>
+<html lang="en" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
+<head>
+    {{ template "header.gohtml" . }}
     <script src="/static/js/reportForm.js"></script>
-{{end}}
+    <title>Report An Issue With Beacon</title>
+</head>
+<body>
+    {{ template "menubar.gohtml" . }}
 
-{{define "body"}}
     <div style="padding: 20px;">
         <div class="Layout Layout--divided">
             <div class="Layout-main" style="margin-top:65px;">
@@ -60,6 +64,5 @@
             {{ template "sidebar.html" . }}
         </div>
     </div>
-{{end}}
-
-{{template "base.gohtml" .}}
+</body>
+</html>

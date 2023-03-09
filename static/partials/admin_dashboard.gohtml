@@ -1,8 +1,13 @@
-{{define "title"}}CrashHelper - Admin dashboard{{end}}
+<!DOCTYPE html>
+<html lang="en" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
+<head>
+    {{ template "header.gohtml" . }}
+    <script src="/static/js/dashboard.js"></script>
+    <title>CrashHelper - Admin dashboard</title>
+</head>
+<body>
+    {{ template "menubar.gohtml" . }}
 
-{{define "head" }}{{end}}
-
-{{ define "body" }}
     <div style="padding: 20px;">
         <div class="Layout">
             <div class="Layout-main" style="margin-top:65px;">
@@ -19,6 +24,5 @@
             </div>
         </div>
     </div>
-{{ end }}
-
-{{ template "base.gohtml" .}}
+</body>
+</html>
