@@ -16,14 +16,14 @@ func main() {
 	// Load Config
 	err := config.LoadConfig()
 	if err != nil {
-		if pathErr, ok := err.(*fs.PathError); ok {
+		if _, ok := err.(*fs.PathError); ok {
 			config.LoadedConfig = config.DefaultConfig
 			err := config.SaveConfig()
 			if err != nil {
 				log.Fatalln(err.Error())
 			}
 		} else {
-			log.Fatalln(pathErr.Error())
+			log.Fatalln(err.Error())
 		}
 	}
 
@@ -66,6 +66,10 @@ func main() {
 	err = router.SetTrustedProxies(nil)
 	if err != nil {
 		panic(err.Error())
+	}
+
+	if !config.LoadedConfig.Debug {
+		gin.SetMode(gin.ReleaseMode)
 	}
 
 	router.LoadHTMLGlob("static/partials/*")
