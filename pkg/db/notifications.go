@@ -7,3 +7,7 @@ func GetNotifications() []model.Notice {
 	database.Where("ended = ?", false).Find(&Notices)
 	return Notices
 }
+
+func PostNotice(notice model.Notice) {
+	database.Save(notice)
+}
