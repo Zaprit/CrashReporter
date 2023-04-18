@@ -106,3 +106,16 @@ func SubmitReportHandler() gin.HandlerFunc {
 
 	}
 }
+
+func ReportDismissHandler() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		reportID := context.Param("uuid")
+		if reportID == "" {
+			context.String(http.StatusBadRequest, "Invalid ID")
+		}
+		err := db.DismissReport(reportID)
+		if err != nil {
+			context.String(http.StatusInternalServerError, "Failed to dismiss report")
+		}
+	}
+}

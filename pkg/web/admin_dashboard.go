@@ -14,7 +14,7 @@ func AdminDashboardHandler() gin.HandlerFunc {
 		userName := context.GetString("session_user")
 		avatarURL := context.GetString("session_avatar")
 
-		reports := db.GetReports()
+		reports := db.GetReports(false)
 
 		for i, r := range reports {
 			reportAvatar := "/static/missing.png"

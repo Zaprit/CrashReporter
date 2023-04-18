@@ -21,7 +21,7 @@
                     {{ if .Reports}}
                         <div class="Box">
                                 {{ range .Reports }}
-                                    <div id="report-{{ .UUID}}" class="Box-row d-flex flex-items-center">
+                                    <div id="report-{{ .UUID }}" class="Box-row d-flex flex-items-center">
                                         <div class="flex-auto">
                                             <strong>{{ .Title }}
 
@@ -31,8 +31,16 @@
                                             </div>
                                         </div>
 
-                                        <button class="btn btn-danger" type="button" onclick="">Dismiss</button>
-                                        <a class="btn btn-primary" href="/admin/report?id={{ .UUID }}">View</a>
+                                        {{ if .Resolved }}
+                                            {{ template "resolved_report.html" .}}
+                                        {{else}}
+                                            {{ template "open_report.html" .}}
+                                        {{end}}
+                                        
+                                        <div class="BtnGroup">
+                                            <button class="BtnGroup-item btn btn-danger" type="button" onclick="DismissReport('{{ .UUID }}');">Dismiss</button>
+                                            <a class="BtnGroup-item btn btn-primary" href="/admin/report?id={{ .UUID }}">View</a>
+                                        </div>
                                     </div>
                                 {{ end }}
                         </div>

@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"github.com/Zaprit/CrashReporter/pkg/config"
+	"github.com/Zaprit/CrashReporter/pkg/db"
 	"github.com/Zaprit/CrashReporter/pkg/github_oauth"
 	"github.com/gin-gonic/gin"
 	"io"
@@ -63,7 +64,7 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 			return
 		}
 
-		session, err := github_oauth.UserFromOAuth2Token(Token.AccessToken)
+		session, err := github_oauth.SessionFromOAuth2Token(Token.AccessToken)
 
 		var isAdmin bool
 		for _, admin := range config.LoadedConfig.AdminUsers {
@@ -81,5 +82,21 @@ func OAuthCallbackHandler() gin.HandlerFunc {
 		context.SetCookie("session_id", session.ID, 3600, "/", config.LoadedConfig.PublicURL, true, true)
 
 		context.Redirect(http.StatusFound, "/admin/reports")
+	}
+}
+
+func LogoutHandler() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		sessionId, err := context.Cookie("session_id")
+		if err != nil {
+			context.String(http.StatusBadRequest, "User not logged in.")
+			return
+		}
+		err = db.EndSession(sessionId)
+		if err != nil {
+			context.String(http.StatusBadRequest, "Session not found.")
+			return
+		}
+		context.Redirect(http.StatusTemporaryRedirect, "/")
 	}
 }

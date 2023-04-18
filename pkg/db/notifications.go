@@ -9,5 +9,9 @@ func GetNotifications() []model.Notice {
 }
 
 func PostNotice(notice model.Notice) {
-	database.Save(notice)
+	database.Save(&notice)
+}
+
+func DeleteNotice(noticeID string) {
+	database.Delete(model.Notice{}, "id = ?", noticeID)
 }

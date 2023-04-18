@@ -22,9 +22,13 @@ func ReadReport(uuid string) {
 	database.Model(&model.Report{}).Where("uuid = ?", uuid).Update("read", true)
 }
 
-func GetReports() []model.Report {
+func GetReports(showResolved bool) []model.Report {
 	var reports []model.Report
-	database.Find(&reports)
+	if showResolved {
+		database.Find(&reports)
+	} else {
+		database.Where("resolved = false").Find(&reports)
+	}
 	return reports
 }
 
@@ -84,4 +88,9 @@ func SaveReport(report *model.Report) error {
 		return database.Error
 	}
 	return nil
+}
+
+func DismissReport(reportID string) error {
+	database.Model(model.Report{}).Where("uuid = ?", reportID).Update("resolved", true)
+	return database.Error
 }

@@ -99,8 +99,13 @@ func main() {
 	apiV1.GET("user/:username", api.LighthouseUsersApiHandler())
 	apiV1.GET("search", api.LighthouseUserSearchApiHandler())
 	apiV1.GET("report/:uuid/comments", api.CommentsHandler())
-	apiV1.POST("report/:uuid/post_comment", api.PostCommentHandler())
 	apiV1.GET("logout", api.LogoutHandler())
+	authAPI := apiV1.Group("", middleware.APIAuthorizationMiddleware())
+	authAPI.POST("notice", api.NoticeSubmitHandler())
+	authAPI.DELETE("notice/:id", api.NoticeDismissHandler())
+
+	authAPI.DELETE("report/:uuid", api.ReportDismissHandler())
+	authAPI.POST("report/:uuid/post_comment", api.PostCommentHandler())
 
 	// 404 Page
 	router.NoRoute(func(context *gin.Context) {

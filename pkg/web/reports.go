@@ -22,7 +22,7 @@ func ReportsHandler() gin.HandlerFunc {
 		//    }
 		//}
 
-		reports := db.GetReports()
+		reports := db.GetReports(true)
 
 		context.HTML(http.StatusOK, "reports.gohtml", gin.H{
 			"LoggedIn":  userName != "",

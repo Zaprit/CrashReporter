@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func AuthorizationMiddleware() gin.HandlerFunc {
+func APIAuthorizationMiddleware() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		sessionId, _ := context.Cookie("session_id")
 		context.Set("session_id", sessionId)
@@ -14,7 +14,7 @@ func AuthorizationMiddleware() gin.HandlerFunc {
 		session, _ := db.GetSession(sessionId)
 
 		if session.ID == "" {
-			context.HTML(http.StatusForbidden, "unauthorized.gohtml", nil)
+			context.String(http.StatusForbidden, "Unauthorized")
 			context.Abort()
 			return
 		}

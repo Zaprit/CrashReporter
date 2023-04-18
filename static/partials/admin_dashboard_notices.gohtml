@@ -1,18 +1,17 @@
 <div class="Box m-1">
     <div class="Box-header">
-        <h3 class="Box-title">
-            <a class="Link--muted" href="/admin/notices">Notices</a>
-        </h3>
+        <h3 class="Box-title">Notices</h3>
     </div>
     <div class="Box-body">
         <div class="Box">
             <div class="Box-row">
                 <form id="notice_form">
-                    <select class="form-select" aria-label="Severity">
+                    <select class="form-select" aria-label="Severity" name="status">
                         <option disabled selected>Choose an option</option>
-                        <option label="Fixed">fixed</option>
-                        <option label="Low Severity">low</option>
-                        <option label="High Severity">high</option>
+                        <option label="Info">info</option>
+                        <option label="Fixed">resolved</option>
+                        <option label="Low Severity">warning</option>
+                        <option label="High Severity">urgent</option>
                     </select>
                     <span class="input-group-button">
                             <button class="btn btn-primary" onclick="postNotice()" type="button" aria-label="Post Notice">
@@ -31,12 +30,29 @@
             {{ if .Notices }}
                 {{ range .Notices }}
                     {{ if not .Ended}}
-                        <div class="Box-row">
-                            {{ .Title }}
-                            <button class="btn btn-danger mr-2" type="button">
-                                <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z"></path></svg>
-                                <span>Remove</span>
-                            </button>
+                        <div class="Box-row" id="notice_{{.ID}}">
+                            <div class="d-flex flex-row">
+                                <div class="col-7">
+                                    {{ .NoticeText }}
+                                </div>
+                                <div class="col-4">
+                                    {{ if eq .Status "info" }}
+                                        <span class="Label mr-1 Label--accent">Info</span>
+                                    {{ else if eq .Status "resolved" }}
+                                        <span class="Label mr-1 Label--success">Resolved</span>
+                                    {{ else if eq .Status "warning" }}
+                                        <span class="Label mr-1 Label--attention">Warning</span>
+                                    {{ else if eq .Status "urgent" }}
+                                        <span class="Label mr-1 Label--danger">Urgent</span>
+                                    {{end}}
+                                </div>
+                                <div class="flex-content-end float-right">
+                                    <button onclick="deleteNotice('{{.ID}}');" class="btn btn-danger mr-2" type="button">
+                                        <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z"></path></svg>
+                                        <span>Remove</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     {{end}}
                 {{ end }}

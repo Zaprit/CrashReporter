@@ -9,8 +9,8 @@ import (
 	"net/http"
 )
 
-// UserFromOAuth2Token gets a session from the auth token we receive from GitHub
-func UserFromOAuth2Token(token string) (model.Session, error) {
+// SessionFromOAuth2Token gets a session from the auth token we receive from GitHub
+func SessionFromOAuth2Token(token string) (model.Session, error) {
 	req, err := http.NewRequest("GET", "https://api.github.com/user", nil)
 	if err != nil {
 		return model.Session{}, err
