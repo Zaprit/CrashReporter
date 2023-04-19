@@ -1,7 +1,6 @@
 package web
 
 import (
-	"fmt"
 	"github.com/Zaprit/CrashReporter/pkg/config"
 	"github.com/Zaprit/CrashReporter/pkg/db"
 	"github.com/Zaprit/CrashReporter/pkg/lighthouse_client"
@@ -27,7 +26,6 @@ func ReportHandler() gin.HandlerFunc {
 		report := db.GetReport(context.Query("id"))
 
 		if report.UUID == "" {
-			fmt.Println("Report Not Found")
 			context.HTML(404, "not_found.gohtml", nil)
 			return
 		}
@@ -44,7 +42,7 @@ func ReportHandler() gin.HandlerFunc {
 		}
 
 		summary := truncate(report.Description, 50)
-		fmt.Println(report.Description)
+
 		context.HTML(http.StatusOK, "report.gohtml", gin.H{
 			"AdminArea":         context.FullPath() == "/admin/report",
 			"LoggedIn":          userName != "",
@@ -64,6 +62,7 @@ func ReportHandler() gin.HandlerFunc {
 			"ReportEvidence":    report.Evidence,
 			"ReportPriority":    report.Priority,
 			"ReportResolved":    report.Resolved,
+			"ReportIP":          report.SubmitterIP,
 		})
 	}
 }

@@ -119,3 +119,16 @@ func ReportDismissHandler() gin.HandlerFunc {
 		}
 	}
 }
+
+func ReportOpenHandler() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		reportID := context.Param("uuid")
+		if reportID == "" {
+			context.String(http.StatusBadRequest, "Invalid ID")
+		}
+		err := db.ReopenReport(reportID)
+		if err != nil {
+			context.String(http.StatusInternalServerError, "Failed to re-open report")
+		}
+	}
+}

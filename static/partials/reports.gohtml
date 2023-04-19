@@ -16,33 +16,33 @@
 
         <div style="padding: 20px;">
             <div class="Layout Layout--divided">
-
                 <div class="Layout-main" style="margin-top:65px;">
                     {{ if .Reports}}
                         <div class="Box">
-                                {{ range .Reports }}
-                                    <div id="report-{{ .UUID }}" class="Box-row d-flex flex-items-center">
-                                        <div class="flex-auto">
-                                            <strong>{{ .Title }}
-
-                                            </strong>
-                                            <div style="overflow: hidden; text-overflow: ellipsis;" class="text-small color-fg-subtle">
-                                                {{ .Description }}
-                                            </div>
-                                        </div>
-
-                                        {{ if .Resolved }}
-                                            {{ template "resolved_report.html" .}}
-                                        {{else}}
-                                            {{ template "open_report.html" .}}
-                                        {{end}}
-                                        
-                                        <div class="BtnGroup">
-                                            <button class="BtnGroup-item btn btn-danger" type="button" onclick="DismissReport('{{ .UUID }}');">Dismiss</button>
-                                            <a class="BtnGroup-item btn btn-primary" href="/admin/report?id={{ .UUID }}">View</a>
+                            {{ range .Reports }}
+                                <div id="report-{{ .UUID }}" class="Box-row d-flex flex-items-center">
+                                    <div class="flex-auto">
+                                        <strong>{{ .Title }}</strong>
+                                        <br />
+                                        <div style="max-width: 50em; overflow: hidden; text-overflow: ellipsis;" class="text-small color-fg-subtle Truncate">
+                                            <span class="Truncate-text">{{ .Description }}</span>
                                         </div>
                                     </div>
-                                {{ end }}
+                                    {{ if .Resolved }}
+                                        {{ template "resolved_report.html" .}}
+                                    {{else}}
+                                        {{ template "open_report.html" .}}
+                                    {{end}}
+                                    <div class="BtnGroup">
+                                        {{ if .Resolved }}
+                                            <button class="BtnGroup-item btn btn-outline" type="button" onclick="ReopenReport('{{ .UUID }}');">Re-Open</button>
+                                        {{else}}
+                                            <button class="BtnGroup-item btn btn-danger" type="button" onclick="DismissReport('{{ .UUID }}');">Dismiss</button>
+                                        {{end}}
+                                        <a class="BtnGroup-item btn btn-primary" href="/admin/report?id={{ .UUID }}">View</a>
+                                    </div>
+                                </div>
+                            {{ end }}
                         </div>
                     {{ else }}
                         <div class="blankslate">

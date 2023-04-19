@@ -61,15 +61,15 @@ func main() {
 		}
 	}
 
+	if !config.LoadedConfig.Debug {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	// HTTP Router
 	router := gin.Default()
 	err = router.SetTrustedProxies(nil)
 	if err != nil {
 		panic(err.Error())
-	}
-
-	if !config.LoadedConfig.Debug {
-		gin.SetMode(gin.ReleaseMode)
 	}
 
 	router.LoadHTMLGlob("static/partials/*")
@@ -104,6 +104,7 @@ func main() {
 	authAPI.POST("notice", api.NoticeSubmitHandler())
 	authAPI.DELETE("notice/:id", api.NoticeDismissHandler())
 
+	authAPI.POST("report/:uuid/reopen", api.ReportOpenHandler())
 	authAPI.DELETE("report/:uuid", api.ReportDismissHandler())
 	authAPI.POST("report/:uuid/post_comment", api.PostCommentHandler())
 

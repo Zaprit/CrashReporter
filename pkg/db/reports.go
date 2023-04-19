@@ -94,3 +94,8 @@ func DismissReport(reportID string) error {
 	database.Model(model.Report{}).Where("uuid = ?", reportID).Update("resolved", true)
 	return database.Error
 }
+
+func ReopenReport(reportID string) error {
+	database.Model(model.Report{}).Where("uuid = ?", reportID).Update("resolved", false)
+	return database.Error
+}
