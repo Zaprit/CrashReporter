@@ -18,7 +18,7 @@ func SubmitReportHandler() gin.HandlerFunc {
 			Type:        context.PostForm("issue_type"),
 			Platform:    context.PostForm("platform"),
 			Description: context.PostForm("details"),
-			SubmitterIP: context.RemoteIP(),
+			SubmitterIP: context.ClientIP(),
 			Evidence:    false,
 		}
 
