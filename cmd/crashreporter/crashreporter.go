@@ -67,7 +67,7 @@ func main() {
 
 	// HTTP Router
 	router := gin.Default()
-	err = router.SetTrustedProxies(nil)
+	router.TrustedPlatform = gin.PlatformCloudflare
 	if err != nil {
 		panic(err.Error())
 	}
