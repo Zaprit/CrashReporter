@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/static/styles/primer.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <title>Report an Issue with Beacon</title>
+    <title>Beacon Issue - {{.ReportTitle}} </title>
     <script src="/static/js/utils.js"></script>
     <script src="/static/js/comments.js"></script>
+    <script src="/static/js/reports.js"></script>
 
     <meta property="og:site_name" content="CrashHelper" />
     <meta content="{{ .ReportTitle }}" property="og:title" />
@@ -34,15 +35,16 @@
                                 {{ template "open_report.html" }}
                             {{end}}
                             <span class="branch-name float-right mt-2">{{ .ReportUUID }}</span>
+                            <br>
                             {{ if .AdminArea }}
                                 {{ template "report_buttons.gohtml" .}}
                             {{ end }}
                         </h3>
 
-                        <div>
+                        <a class="Link--muted" href="{{ $.LighthouseURL }}/user/{{.UserID}}">
                             <img class="avatar avatar-5 mr-2" alt="User avatar" src="{{ .ReportAvatar }}" />
                             {{ .ReportUser }}
-                        </div>
+                        </a>
                     </div>
 
 

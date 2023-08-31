@@ -2,7 +2,6 @@ package webhook
 
 import (
 	"fmt"
-
 	"github.com/Zaprit/CrashReporter/pkg/config"
 	"github.com/Zaprit/CrashReporter/pkg/model"
 	"github.com/disgoorg/disgo/discord"
@@ -41,7 +40,7 @@ func SendReport(report model.Report) (string, error) {
 		discord.NewEmbedBuilder().
 			SetTitle(report.Title).
 			SetColor(0x15ba15).
-			// TODO: Fix url
+			SetAuthorName("CrashHelper").
 			SetDescriptionf("[View report](%s/report?id=%s)", config.LoadedConfig.PublicURL, report.UUID).
 			AddField("Issue Type", report.Type, false).
 			AddField("Issue Priority", priority, false).

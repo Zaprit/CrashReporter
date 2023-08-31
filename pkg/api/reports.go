@@ -22,8 +22,8 @@ func SubmitReportHandler() gin.HandlerFunc {
 			Evidence:    false,
 		}
 
-		if len(report.Title) > 20 {
-			context.String(http.StatusBadRequest, "The title is too long, it must be less than 20 characters.")
+		if len(report.Title) > 50 {
+			context.String(http.StatusBadRequest, "The title is too long, it must be less than 50 characters.")
 			return
 		}
 
@@ -45,8 +45,8 @@ func SubmitReportHandler() gin.HandlerFunc {
 
 		report.UserID = user.UserId
 
-		if len(report.Description) > 500 {
-			context.String(http.StatusBadRequest, "The description is too long, it must be less than or equal to 500 characters in length")
+		if len(report.Description) > 1500 {
+			context.String(http.StatusBadRequest, "The description is too long, it must be less than or equal to 1500 characters in length")
 			return
 		}
 
@@ -63,10 +63,12 @@ func SubmitReportHandler() gin.HandlerFunc {
 
 		if report.Type == "LBP issue, i.e. game crash, graphics bugs, etc." { //TODO: Move all the names from long UI strings to more generic values
 			context.String(http.StatusUnprocessableEntity, "This service is not for submitting reports regarding LittleBigPlanet. Please only submit reports pertaining to Beacon.<br />If you require immediate assistance, we recommend asking for help in the <span class='branch-name'>🚀union-space-corps</span> channel of the <a href='https://discord.gg/lbpunion'>LBP Union Discord</a>.")
+			return
 		}
 
 		if context.PostForm("priority") == "" {
 			context.String(http.StatusBadRequest, "Please choose a priority")
+			return
 		}
 
 		if priority, exists := model.Priorities[context.PostForm("priority")]; exists {

@@ -27,3 +27,24 @@ function ReopenReport(id) {
 
     XHR.send();
 }
+
+async function BanUser(ip) {
+    const duration = window.prompt("Ban Duration, in days");
+    if (!duration || !duration.trim() || isNaN(duration)) {
+        alert("Invalid duration");
+        return
+    }
+    const reason = window.prompt("Ban Reason:");
+    let resp = await fetch("/api/v1/ban", {
+        method: "POST",
+        body: JSON.stringify({
+            ip: ip,
+            duration: duration,
+            reason: reason,
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    });
+    alert(resp.body);
+}

@@ -7,6 +7,8 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"net/netip"
+	"time"
 )
 
 var database *gorm.DB
@@ -57,4 +59,21 @@ func MigrateDB() {
 	if err != nil {
 		panic(err.Error())
 	}
+}
+
+func BanIP(addr netip.Addr, reason string, until time.Time) {
+	database.Save(&model.Ban{
+		IP:      addr,
+		Reason:  reason,
+		EndDate: until,
+	})
+}
+
+func IsBanned(addr netip.Addr) bool {
+	ban := model.Ban{}
+	database.Where("ip = ?", addr).First(&ban)
+	if time.Now().Before(ban.EndDate) {
+		return true
+	}
+	return false
 }

@@ -25,9 +25,9 @@ func ReadReport(uuid string) {
 func GetReports(showResolved bool) []model.Report {
 	var reports []model.Report
 	if showResolved {
-		database.Order("resolved").Order("submit_time desc").Find(&reports)
+		database.Order("submit_time desc").Order("resolved").Find(&reports)
 	} else {
-		database.Where("resolved = false").Order("submit_time desc").Order("").Find(&reports)
+		database.Where("resolved = false").Order("submit_time desc").Find(&reports)
 	}
 	return reports
 }

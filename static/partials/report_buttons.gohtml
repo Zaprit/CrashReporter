@@ -1,0 +1,8 @@
+<div class="BtnGroup">
+    <button class="BtnGroup-item btn btn-danger" type="button" onclick="BanUser('{{.ReportIP}}')">Ban User</button>
+    {{ if .Resolved }}
+        <button class="BtnGroup-item btn btn-outline" type="button" onclick="ReopenReport('{{ .UUID }}');">Re-Open</button>
+    {{else}}
+        <button class="BtnGroup-item btn btn-primary" type="button" onclick="DismissReport('{{ .UUID }}');">Dismiss</button>
+    {{end}}
+</div>

@@ -81,6 +81,7 @@ func main() {
 	router.Static("/static/js", "static/js")
 
 	router.Use(middleware.SessionMiddleware())
+	router.Use(middleware.BanMiddleware())
 
 	publicPages := router.Group("/", middleware.SessionMiddleware())
 	publicPages.GET("/", web.IndexHandler())
@@ -94,6 +95,7 @@ func main() {
 
 	apiV1 := router.Group("/api/v1/")
 
+	apiV1.POST("ban", api.BanHandler())
 	apiV1.POST("report", api.SubmitReportHandler())
 	apiV1.GET("oauth/callback", api.OAuthCallbackHandler())
 	apiV1.GET("user/:username", api.LighthouseUsersApiHandler())

@@ -27,6 +27,7 @@ type Config struct {
 	OAuth2ClientID     string   `comment:"The client ID of your GitHub application, required for OAuth2 login"`
 	OAuth2ClientSecret string   `comment:"The client secret of your GitHub application, required for OAuth2 login"`
 	PublicURL          string   `comment:"The public URL of your instance, used for cookies and discord links, not required but recommended"`
+	AppealURL          string   `comment:"The URL that banned users will be directed to for appealing a ban decision"`
 	Debug              bool     `comment:"Enable debug mode, this will log in a verbose manor, mainly intended for developers"`
 	LighthouseURL      string   `comment:"The URL for your ProjectLighthouse instance, required for user lookup, leave blank to disable"`
 

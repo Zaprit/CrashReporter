@@ -62,10 +62,14 @@ function sendData() {
 
         let toastEl = document.createElement("div");
         toastEl.setAttribute("id", "statusToast");
-        toastEl.setAttribute("class", `Toast ${toastFlag} position-fixed bottom-0 right-0 mb-3 ml-3`);
+        toastEl.setAttribute("class", `Toast ${toastFlag} position-fixed top-10 right-0 mb-3 ml-3 mt-5`);
+
+        toastEl.setAttribute("role", "log"); // For accessibility purposes
+        toastEl.setAttribute("aria-labelledby", "toastText");
+
         toastEl.innerHTML = `
             ${icon}
-            <span class="Toast-content">${XHR.response}</span>
+            <span id="toastText" class="Toast-content">${XHR.response}</span>
         `;
 
         container.item(0).append(toastEl);
